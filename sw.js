@@ -53,26 +53,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // for other requests (assets), try cache first then network
+  // for other requests (assets), use network-first so cache stays fresh
   event.respondWith(
-    caches.match(request).then((response) => {
-      if (response) {
-        return response;
-      }
-      return fetch(request)
-        .then((res) => {
-          if (!res || res.status !== 200 || res.type !== 'basic') {
-            return res;
-          }
+    fetch(request)
+      .then((res) => {
+        // if we get a valid response, update the cache
+        if (res && res.status === 200 && res.type === 'basic') {
           const resToCache = res.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, resToCache);
           });
-          return res;
-        })
-        .catch(() => {
-          // optional fallback for missing assets
-        });
-    })
+        }
+        return res;
+      })
+      .catch(() => {
+        // if network fails, fall back to cache
+        return caches.match(request);
+      })
   );
 });
