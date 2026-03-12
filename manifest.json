@@ -1,5 +1,11 @@
 {
- "name": "App",
+  "name": "LLJT Learning Platform",
+  "short_name": "LLJT",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "description": "A Japanese learning platform that redefines traditional teaching methods.",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
